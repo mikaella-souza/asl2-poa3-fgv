@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel POA3 — SEMA/AC 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --green-dark: #0d4a2a;
+    --green-mid: #1a7a46;
+    --green-light: #28a660;
+    --green-pale: #d4edda;
+    --gold: #c5a229;
+    --gold-light: #f0d875;
+    --amber: #e07b00;
+    --red: #c0392b;
+    --blue: #1a4f8a;
+    --bg: #f3f7f3;
+    --white: #ffffff;
+    --gray: #6b7a72;
+    --text: #1a2e1f;
+    --border: #c8dcc8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 60%, #1d6b3e 100%);
+    color: white;
+    padding: 24px 36px 20px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    right: -60px; top: -60px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    right: 60px; bottom: -80px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.035);
+  }
+  .header-logo {
+    width: 58px; height: 58px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .header-text h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
+  .header-text p { font-size: 12.5px; opacity: 0.72; margin-top: 3px; }
+  .header-badge {
+    margin-left: auto;
+    background: rgba(255,255,255,0.13);
+    border: 1px solid rgba(255,255,255,0.22);
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  /* MAIN LAYOUT */
+  main { padding: 28px 32px 48px; max-width: 1400px; margin: 0 auto; }
+
+  /* KPI CARDS */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .kpi-card {
+    background: white;
+    border-radius: 14px;
+    padding: 20px 22px;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    border-radius: 14px 0 0 14px;
+  }
+  .kpi-card.green::before { background: var(--green-light); }
+  .kpi-card.gold::before { background: var(--gold); }
+  .kpi-card.blue::before { background: var(--blue); }
+  .kpi-card.red::before { background: var(--red); }
+
+  .kpi-label { font-size: 11px; font-weight: 600; color: var(--gray); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 8px; }
+  .kpi-value { font-size: 28px; font-weight: 700; line-height: 1; font-family: 'JetBrains Mono', monospace; }
+  .kpi-value.green { color: var(--green-mid); }
+  .kpi-value.gold { color: var(--gold); }
+  .kpi-value.blue { color: var(--blue); }
+  .kpi-value.red { color: var(--red); }
+  .kpi-sub { font-size: 11.5px; color: var(--gray); margin-top: 6px; }
+  .kpi-icon { position: absolute; right: 18px; top: 18px; font-size: 28px; opacity: 0.15; }
+
+  /* PROGRESS BAR CARD */
+  .progress-card {
+    background: white;
+    border-radius: 14px;
+    padding: 20px 24px;
+    border: 1px solid var(--border);
+    margin-bottom: 28px;
+  }
+  .progress-card h3 { font-size: 13px; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 16px; }
+  .progress-bar-wrap { margin-bottom: 12px; }
+  .progress-bar-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; }
+  .progress-bar-track { background: #e8f0e8; border-radius: 100px; height: 10px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; border-radius: 100px; transition: width 1s ease; }
+  .pb-green { background: linear-gradient(90deg, var(--green-mid), var(--green-light)); }
+  .pb-gold { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+  .pb-blue { background: linear-gradient(90deg, var(--blue), #4a8ee0); }
+  .pb-red { background: linear-gradient(90deg, var(--red), #e05c4a); }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-size: 14px; font-weight: 600; color: var(--gray);
+    text-transform: uppercase; letter-spacing: 0.8px;
+    margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* FILTERS */
+  .filters {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    margin-bottom: 20px; align-items: center;
+  }
+  .filter-btn {
+    padding: 6px 16px; border-radius: 20px; border: 1px solid var(--border);
+    font-family: 'Sora', sans-serif; font-size: 12px; font-weight: 500;
+    background: white; color: var(--gray); cursor: pointer; transition: all 0.15s;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--green-mid); color: white; border-color: var(--green-mid);
+  }
+  .filter-search {
+    padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border);
+    font-family: 'Sora', sans-serif; font-size: 12px; color: var(--text);
+    background: white; outline: none; min-width: 200px;
+  }
+  .filter-search:focus { border-color: var(--green-mid); }
+
+  /* ACTIVITY TABLE */
+  .table-wrap { background: white; border-radius: 14px; border: 1px solid var(--border); overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; }
+  thead { background: var(--green-dark); color: white; }
+  thead th { padding: 12px 16px; font-size: 11px; font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; text-align: left; }
+  tbody tr { border-bottom: 1px solid #eef3ee; transition: background 0.1s; cursor: pointer; }
+  tbody tr:hover { background: #f3faf3; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody td { padding: 12px 16px; font-size: 12.5px; vertical-align: middle; }
+  .td-id { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gray); white-space: nowrap; }
+  .td-atividade { max-width: 320px; }
+  .td-atividade .title { font-weight: 600; font-size: 12.5px; margin-bottom: 2px; color: var(--text); }
+  .td-atividade .sub { font-size: 11px; color: var(--gray); }
+  .td-budget { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .td-exec { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+
+  /* BADGES */
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 12px;
+    font-size: 10.5px; font-weight: 600; white-space: nowrap;
+  }
+  .badge-imediato { background: #fef3cd; color: #856404; }
+  .badge-execucao { background: #d1e7dd; color: #0a3622; }
+  .badge-atualizar { background: #fde3e0; color: #842029; }
+  .badge-2026 { background: #cfe2ff; color: #084298; }
+
+  .badge-comp-pol { background: #d4edda; color: #1a5c2e; }
+  .badge-comp-cap { background: #d0e4f7; color: #1a3a6b; }
+  .badge-comp-gest { background: #fff3cd; color: #5a3e00; }
+
+  .badge-lr-pronta { background: #d1e7dd; color: #0a3622; }
+  .badge-lr-padrao { background: #e2e8f0; color: #334155; }
+  .badge-lr-dash { background: #f1f5f9; color: #94a3b8; }
+
+  /* MINI PROGRESS IN TABLE */
+  .mini-prog { width: 80px; display: inline-block; vertical-align: middle; }
+  .mini-prog-track { background: #e8f0e8; border-radius: 100px; height: 6px; overflow: hidden; margin-bottom: 2px; }
+  .mini-prog-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--green-mid), var(--green-light)); }
+  .mini-prog-pct { font-size: 10px; color: var(--gray); font-family: 'JetBrains Mono', monospace; }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45); z-index: 999;
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: white; border-radius: 18px; width: 720px; max-width: 95vw;
+    max-height: 90vh; overflow-y: auto;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.18);
+    animation: slideIn 0.2s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .modal-header {
+    background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+    color: white; padding: 22px 28px;
+    border-radius: 18px 18px 0 0;
+    display: flex; justify-content: space-between; align-items: flex-start;
+  }
+  .modal-header h2 { font-size: 15px; font-weight: 700; line-height: 1.4; max-width: 580px; }
+  .modal-header .mid { font-family: 'JetBrains Mono', monospace; font-size: 11px; opacity: 0.7; margin-top: 4px; }
+  .modal-close { background: rgba(255,255,255,0.15); border: none; color: white; cursor: pointer;
+    width: 30px; height: 30px; border-radius: 50%; font-size: 16px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: 12px; }
+  .modal-close:hover { background: rgba(255,255,255,0.28); }
+  .modal-body { padding: 26px 28px; }
+  .modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+  .modal-field label { font-size: 10.5px; color: var(--gray); font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; display: block; margin-bottom: 4px; }
+  .modal-field span { font-size: 13px; color: var(--text); font-weight: 500; }
+  .modal-field.full { grid-column: 1 / -1; }
+  .modal-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+  .modal-budget-row { display: flex; gap: 24px; background: #f3faf3; border-radius: 12px; padding: 16px; margin-bottom: 18px; }
+  .modal-budget-item { flex: 1; }
+  .modal-budget-item label { font-size: 10.5px; color: var(--gray); font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; display: block; margin-bottom: 4px; }
+  .modal-budget-item .val { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; }
+  .modal-budget-item .val.big { color: var(--green-mid); }
+  .modal-budget-item .val.exec { color: var(--gold); }
+  .insumos-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .insumo-tag {
+    background: #eef7ee; color: var(--green-dark); border: 1px solid #c3dcc3;
+    padding: 3px 10px; border-radius: 10px; font-size: 11.5px; font-weight: 500;
+  }
+
+  /* COMPONENT CHART */
+  .comp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+  .comp-card {
+    background: white; border-radius: 14px; border: 1px solid var(--border); padding: 20px 22px;
+  }
+  .comp-card h3 { font-size: 12px; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 16px; }
+  .comp-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .comp-bar-label { font-size: 11.5px; width: 140px; flex-shrink: 0; color: var(--text); }
+  .comp-bar-track { flex: 1; background: #eef3ee; border-radius: 100px; height: 8px; overflow: hidden; }
+  .comp-bar-fill { height: 100%; border-radius: 100px; }
+  .comp-bar-val { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--gray); min-width: 80px; text-align: right; }
+
+  .no-results { text-align: center; padding: 40px; color: var(--gray); font-size: 14px; }
+
+  footer {
+    text-align: center; padding: 24px;
+    font-size: 11px; color: var(--gray);
+    border-top: 1px solid var(--border);
+    background: white;
+  }
+
+  @media (max-width: 900px) {
+    .kpi-grid { grid-template-columns: 1fr 1fr; }
+    .comp-grid { grid-template-columns: 1fr; }
+    main { padding: 18px 14px 40px; }
+    header { padding: 18px 20px; }
+    .header-badge { display: none; }
+  }
+  @media (max-width: 600px) {
+    .kpi-grid { grid-template-columns: 1fr 1fr; }
+    thead th:nth-child(3), tbody td:nth-child(3),
+    thead th:nth-child(5), tbody td:nth-child(5),
+    thead th:nth-child(6), tbody td:nth-child(6) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-logo">🌿</div>
+  <div class="header-text">
+    <h1>Painel de Monitoramento — SEMA/AC</h1>
+    <p>Plano Operativo Anual POA 3 · Exercício 2026 · Secretaria de Meio Ambiente do Acre</p>
+  </div>
+  <div class="header-badge">📅 POA 3 · 2026</div>
+</header>
+
+<main>
+
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi-card green">
+      <div class="kpi-icon">🎯</div>
+      <div class="kpi-label">Total de Atividades</div>
+      <div class="kpi-value green" id="kpi-total">29</div>
+      <div class="kpi-sub">Atividades cadastradas no POA3</div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="kpi-icon">💰</div>
+      <div class="kpi-label">Orçamento Total</div>
+      <div class="kpi-value gold" id="kpi-budget">R$ 7,51M</div>
+      <div class="kpi-sub">Valor previsto para execução</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-icon">📊</div>
+      <div class="kpi-label">Valor Executado</div>
+      <div class="kpi-value blue" id="kpi-exec">R$ 248,6K</div>
+      <div class="kpi-sub">3,3% do orçamento total</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-icon">⚡</div>
+      <div class="kpi-label">Execução Imediata</div>
+      <div class="kpi-value red" id="kpi-imediato">20</div>
+      <div class="kpi-sub">Atividades com prioridade imediata</div>
+    </div>
+  </div>
+
+  <!-- PROGRESS BY COMPONENT -->
+  <div class="comp-grid">
+    <div class="progress-card" style="margin-bottom:0">
+      <h3>Execução Orçamentária por Componente</h3>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Gestão da Paisagem</span><span id="pb-gest-val"></span></div>
+        <div class="progress-bar-track"><div class="progress-bar-fill pb-green" id="pb-gest" style="width:0%"></div></div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Políticas Públicas</span><span id="pb-pol-val"></span></div>
+        <div class="progress-bar-track"><div class="progress-bar-fill pb-gold" id="pb-pol" style="width:0%"></div></div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Capacitação</span><span id="pb-cap-val"></span></div>
+        <div class="progress-bar-track"><div class="progress-bar-fill pb-blue" id="pb-cap" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <h3>Distribuição por Prioridade</h3>
+      <div id="chart-prioridade"></div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:28px"></div>
+
+  <!-- ACTIVITY TABLE -->
+  <div class="section-title">📋 Atividades</div>
+
+  <div class="filters">
+    <input class="filter-search" type="text" placeholder="🔍  Buscar atividade, departamento…" oninput="applyFilters()" id="search-input">
+    <button class="filter-btn active" onclick="setFilter('all',this)">Todas</button>
+    <button class="filter-btn" onclick="setFilter('IMEDIATAMENTE',this)">⚡ Imediatas</button>
+    <button class="filter-btn" onclick="setFilter('EM EXECUÇÃO',this)">🔄 Em Execução</button>
+    <button class="filter-btn" onclick="setFilter('ATUALIZAR',this)">📝 Atualizar</button>
+    <button class="filter-btn" onclick="setFilter('2026',this)">📅 2026</button>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Atividade</th>
+          <th>Componente</th>
+          <th>Departamento</th>
+          <th>Orçamento</th>
+          <th>Execução</th>
+          <th>Prioridade</th>
+          <th>LR</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+    <div class="no-results" id="no-results" style="display:none">Nenhuma atividade encontrada.</div>
+  </div>
+
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div>
+        <div class="mid" id="modal-id"></div>
+        <h2 id="modal-title"></h2>
+      </div>
+      <button class="modal-close" onclick="closeModalBtn()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-budget-row">
+        <div class="modal-budget-item">
+          <label>Orçamento Previsto</label>
+          <div class="val big" id="modal-budget"></div>
+        </div>
+        <div class="modal-budget-item">
+          <label>Valor Executado</label>
+          <div class="val exec" id="modal-exec"></div>
+        </div>
+        <div class="modal-budget-item">
+          <label>% Executado</label>
+          <div class="val" id="modal-pct" style="color:var(--gray)"></div>
+        </div>
+      </div>
+      <div class="modal-row">
+        <div class="modal-field">
+          <label>Componente</label>
+          <span id="modal-comp"></span>
+        </div>
+        <div class="modal-field">
+          <label>Departamento / Focal</label>
+          <span id="modal-dept"></span>
+        </div>
+        <div class="modal-field">
+          <label>Localização</label>
+          <span id="modal-loc"></span>
+        </div>
+        <div class="modal-field">
+          <label>Período</label>
+          <span id="modal-period"></span>
+        </div>
+        <div class="modal-field">
+          <label>Prioridade</label>
+          <span id="modal-prior"></span>
+        </div>
+        <div class="modal-field">
+          <label>LR / Avaliação Preliminar</label>
+          <span id="modal-lr"></span>
+        </div>
+        <div class="modal-field">
+          <label>Contato</label>
+          <span id="modal-contact"></span>
+        </div>
+      </div>
+      <hr class="modal-divider">
+      <div class="modal-field full">
+        <label>Insumos</label>
+        <div class="insumos-list" id="modal-insumos"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Painel gerado automaticamente a partir da planilha CLAUDE.xlsx · SEMA/AC · POA 3 2026
+</footer>
+
+<script>
+const DATA = [{"ID":"DE-ASL2-POA3-SEMAAC-2026-0001","atividade":"Promover estudos para identificar áreas passíveis de restauração natural florestal\nnas Florestas Estaduais Antimary, Afluente, Gregório, Liberdade, Mogno e ARIE\nJapiim Pentecoste.","componente":"3 - POLÍTICAS PÚBLICAS PARA PROMOÇÃO DA GESTÃO INTEGRADA DA PAISAGEM, CONSERVAÇÃO E RECUPERAÇÃO DA VEGETAÇÃO NATIVA","localizacao":"A regeneração natural florestal será implementada nas Florestas Estaduais - FLOES Antimary, Afluente, Gregório, Liberdade, Mogno e na Área de Relevante\nInteresse Ecológico (ARIE) Japiim Pentecoste","inicio":"01/01/2026","fim":"01/12/2026","valor_total":500000,"valor_exec":8950.0,"prioridade":"IMEDIATAMENTE","lr":"LR PRONTA","avaliacao":"TDR","departamento":"DEUC","focal":"MIRNA CANISO","contato":"mirnacaniso@gmail.com","componente_short":"Políticas Públicas","insumos":["Contratação","Combustível","Diárias"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0002","atividade":"Participação de seis gestores da Florestas Estaduais - FLOES Antimary (57629 ha), Afluente (155121 ha), Gregório (216062 ha), Liberdade (126360 ha), Mogno (143897 ha) e ARIE Japiim Pentecoste (25750 ha) em intercâmbio para conhecer experiencia de regeneração natural vinculada ao programa monitora no cerrado (PN Chapada dos Veadeiros).","componente":"4 - CAPACITAÇÃO, COOPERAÇÃO E COORDENAÇÃO DE PROJETOS ","localizacao":"A regeneração natural florestal será implementada nas Florestas Estaduais - FLOES Antimary, Afluente, Gregório, Liberdade, Mogno e na Área de Relevante\nInteresse Ecológico (ARIE) Japiim Pentecoste","inicio":"01/01/2026","fim":"01/12/2026","valor_total":35550,"valor_exec":0.0,"prioridade":"IMEDIATAMENTE","lr":"LR PRONTA","avaliacao":"RPAD","departamento":"DEUC","focal":"MIRNA CANISO","contato":"mirnacaniso@gmail.com","componente_short":"Capacitação","insumos":["Passagens aéreas","Diárias"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0003","atividade":"Realizar reuniões nas comunidade para definir áreas, colaboradores de gestão\ncomunitários, insumos e planejamento das atividades, a fim de capacitá-los para\nque possam ser protagonistas durante o processo de implementação da\nrestauração natural nas Florestas Estaduais.","componente":"3 - POLÍTICAS PÚBLICAS PARA PROMOÇÃO DA GESTÃO INTEGRADA DA PAISAGEM, CONSERVAÇÃO E RECUPERAÇÃO DA VEGETAÇÃO NATIVA","localizacao":"A regeneração natural florestal será implementada nas Florestas Estaduais - FLOES Antimary, Afluente, Gregório, Liberdade, Mogno e na Área de Relevante\nInteresse Ecológico (ARIE) Japiim Pentecoste","inicio":"01/01/2026","fim":"01/12/2026","valor_total":338000,"valor_exec":0.0,"prioridade":"IMEDIATAMENTE","lr":"LR PRONTA","avaliacao":"ET","departamento":"DEUC","focal":"MIRNA CANISO","contato":"mirnacaniso@gmail.com","componente_short":"Políticas Públicas","insumos":["Combustível","Óleo dois tempos","Combustível","Diárias","Alimentação","Contratação"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0004","atividade":"Realizar reuniões nas comunidade para definir áreas, colaboradores de gestão\ncomunitários, insumos e planejamento das atividades, a fim de capacitá-los para\nque possam ser protagonistas durante o processo de implementação da\nrestauração natural nas Florestas Estaduais.","componente":"3 - POLÍTICAS PÚBLICAS PARA PROMOÇÃO DA GESTÃO INTEGRADA DA PAISAGEM, CONSERVAÇÃO E RECUPERAÇÃO DA VEGETAÇÃO NATIVA","localizacao":"A regeneração natural florestal será implementada nas Florestas Estaduais - FLOES Antimary, Afluente, Gregório, Liberdade, Mogno e na Área de Relevante\nInteresse Ecológico (ARIE) Japiim Pentecoste","inicio":"01/01/2026","fim":"01/12/2026","valor_total":198750,"valor_exec":0.0,"prioridade":"IMEDIATAMENTE","lr":"LR PRONTA","avaliacao":"ET","departamento":"DEUC","focal":"MIRNA CANISO","contato":"mirnacaniso@gmail.com","componente_short":"Políticas Públicas","insumos":["Combustível","Combustível","Diárias","Alimentação"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0005","atividade":"Realizar regeneração natural assistida nas 05 Florestas Estaduais – FLOES do Estado do Acre, sendo elas: FLOES do Antimary, Afluente, Gregório, Liberdade e Mogno e na Área de Relevante Interesse Ecológico Japiim Pentecoste.Visando a construção participativa do projeto de implantação, o assessoramento, capacitação, assistência técnica e extensão rural, envolvendo no mínimo 50 (cinquenta) famílias beneficiárias, durante o prazo de vigência do contrato, bem como o georreferenciamento das áreas.","componente":"3 - POLÍTICAS PÚBLICAS PARA PROMOÇÃO DA GESTÃO INTEGRADA DA PAISAGEM, CONSERVAÇÃO E RECUPERAÇÃO DA VEGETAÇÃO NATIVA","localizacao":"A regeneração natural florestal será implementada nas Florestas Estaduais - FLOES Antimary, Afluente, Gregório, Liberdade, Mogno e na Área de Relevante\nInteresse Ecológico (ARIE) Japiim Pentecoste","inicio":"01/01/2026","fim":"01/12/2026","valor_total":1500000,"valor_exec":0.0,"prioridade":"IMEDIATAMENTE","lr":"LR PRONTA","avaliacao":"TDR?","departamento":"DEUC","focal":"MIRNA CANISO","contato":"mirnacaniso@gmail.com","componente_short":"Políticas Públicas","insumos":["Contratação"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0006","atividade":"Promover encontro de gestores do Sistema Estadual de Áreas Naturais Protegidas do Estado do Acre – SEANP","componente":"4 - CAPACITAÇÃO, COOPERAÇÃO E COORDENAÇÃO DE PROJETOS ","localizacao":"Cruzeiro do Sul e/ou Rio Branco","inicio":"01/01/2026","fim":"01/12/2026","valor_total":131500,"valor_exec":0.0,"prioridade":"IMEDIATAMENTE","lr":"LR PRONTA","avaliacao":"ET","departamento":"DEUC","focal":"MIRNA CANISO","contato":"mirnacaniso@gmail.com","componente_short":"Capacitação","insumos":["Combustível","Passagens aéreas","Diárias","Alimentação","Aquisição","Contratação"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0007","atividade":"Elaborar e implementar protocolo de combate a incêndios florestais nas APAs\nIgarapé São Francisco (30004 ha) e Lago do Amapá (5208 ha)","componente":"3 - POLÍTICAS PÚBLICAS PARA PROMOÇÃO DA GESTÃO INTEGRADA DA PAISAGEM, CONSERVAÇÃO E RECUPERAÇÃO DA VEGETAÇÃO NATIVA","localizacao":"Rio Branco e Bujari","inicio":"01/01/2026","fim":"01/12/2026","valor_total":120000,"valor_exec":7125.0,"prioridade":"IMEDIATAMENTE","lr":"LR PRONTA","avaliacao":"ET","departamento":"DEUC","focal":"MIRNA CANISO","contato":"mirnacaniso@gmail.com","componente_short":"Políticas Públicas","insumos":["Combustível","Diárias","Aquisição"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0008","atividade":"Capacitar equipe técnica do Departamento de Unidades de Conservação - DEUC em temas relacionados com gestão de Unidades de Conservação – UCs, técnicas\nde restauração florestal e conservação da biodiversidade.","componente":"4 - CAPACITAÇÃO, COOPERAÇÃO E COORDENAÇÃO DE PROJETOS ","localizacao":"São Paulo, Rio de Janeiro, Brasília, Manaus, Alagoas","inicio":"01/01/2026","fim":"01/12/2026","valor_total":87000,"valor_exec":0.0,"prioridade":"IMEDIATAMENTE","lr":"LR PRONTA","avaliacao":"RPAD","departamento":"DEUC","focal":"MIRNA CANISO","contato":"mirnacaniso@gmail.com","componente_short":"Capacitação","insumos":["Passagens aéreas","Diárias "]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0009","atividade":"Implementar oito conselhos\ngestores de Ucs estaduais","componente":"2 - GESTÃO INTEGRADA DA PAISAGEM","localizacao":"Florestas Estaduais Antimary (57.629 ha), Afluente (155.121 ha), Gregório (216.062 ha), Liberdade (126.360 ha), Mogno (143.897 ha), ARIE Japiim Pentecoste (25.750 ha), APA Lago do Amapá (5.208 ha) e APA Igarapé São Francisco (30.000 ha)","inicio":"01/01/2026","fim":"01/12/2026","valor_total":115250,"valor_exec":87163.25,"prioridade":"IMEDIATAMENTE","lr":"LR PRONTA","avaliacao":"RPAD","departamento":"DEUC","focal":"MIRNA CANISO","contato":"mirnacaniso@gmail.com","componente_short":"Gestão da Paisagem","insumos":["Diárias ","Combustível","Alimentação"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0010","atividade":"Revisar e atualizar planos de manejo das Florestas Estaduais – FLOEs, Antimary (57629 há), Gregório (216062 ha), Liberdade (126360 ha), Mogno (143897 ha), ARIE Japiim Pentecoste (25750 ha) e elaborar o plano de manejo da FLOE Afluente (155121 ha).","componente":"2 - GESTÃO INTEGRADA DA PAISAGEM","localizacao":"Complexo de Florestas Estaduais do Rio Gregório – CFERG, FLOE Antimary e ARIE Japiim Pentecoste","inicio":"01/01/2026","fim":"01/12/2026","valor_total":800000,"valor_exec":0.0,"prioridade":"IMEDIATAMENTE","lr":"LR PRONTA","avaliacao":"TDR","departamento":"DEUC","focal":"MIRNA CANISO","contato":"mirnacaniso@gmail.com","componente_short":"Gestão da Paisagem","insumos":["Contratação"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0011","atividade":"Elaborar o plano de manejo da Floresta Estadual Afluente","componente":"2 - GESTÃO INTEGRADA DA PAISAGEM","localizacao":"FLOE Afluente","inicio":"01/01/2026","fim":"01/12/2026","valor_total":350000,"valor_exec":0.0,"prioridade":"IMEDIATAMENTE","lr":"LR PRONTA","avaliacao":"TDR","departamento":"DEUC","focal":"MIRNA CANISO","contato":"mirnacaniso@gmail.com","componente_short":"Gestão da Paisagem","insumos":["Contratação"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0012","atividade":"Revisar e atualizar planos de manejo das Florestas Estaduais – FLOEs, Antimary (57629 há), Gregório (216062 ha), Liberdade (126360 ha), Mogno (143897 ha), ARIE Japiim Pentecoste (25750 ha) e elaborar o plano de manejo da FLOE Afluente (155121 ha).","componente":"2 - GESTÃO INTEGRADA DA PAISAGEM","localizacao":"Complexo de Florestas Estaduais do Rio Gregório – CFERG, FLOE Antimary e ARIE Japiim Pentecoste","inicio":"01/01/2026","fim":"01/12/2026","valor_total":162000,"valor_exec":0.0,"prioridade":"IMEDIATAMENTE","lr":"LR PRONTA","avaliacao":"RPAD","departamento":"DEUC","focal":"MIRNA CANISO","contato":"mirnacaniso@gmail.com","componente_short":"Gestão da Paisagem","insumos":["Diárias","Combustível","Alimentação"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0013","atividade":"Elaboração do Plano Estadual de Biodiversidade (PAEB) com base em diálogos entre diversos atores sobre a biodiversidade (lideranças e instituições) discutindo as políticas de desenvolvimento adotadas na Amazônia que visem a conservação da biodiversidade.","componente":"4 - CAPACITAÇÃO, COOPERAÇÃO E COORDENAÇÃO DE PROJETOS ","localizacao":"Rio Branco - Acre","inicio":"01/01/2026","fim":"01/12/2026","valor_total":119340,"valor_exec":7700.0,"prioridade":"IMEDIATAMENTE","lr":"LR PADRÃO","avaliacao":"RPAD","departamento":"DEBIO","focal":"MARILENE BRAZIL","contato":"marilene.biologa@gmail.com","componente_short":"Capacitação","insumos":["Diárias","Combustível","Aquisição","Aquisição"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0014","atividade":"Elaboração do Plano Estadual de Biodiversidade (PAEB) com base em diálogos entre diversos atores sobre a biodiversidade (lideranças e instituições) discutindo as políticas de desenvolvimento adotadas na Amazônia que visem a conservação da biodiversidade.","componente":"4 - CAPACITAÇÃO, COOPERAÇÃO E COORDENAÇÃO DE PROJETOS ","localizacao":"Rio Branco - Acre","inicio":"01/01/2026","fim":"01/12/2026","valor_total":86540,"valor_exec":0.0,"prioridade":"IMEDIATAMENTE","lr":"LR PADRÃO","avaliacao":"RPAD","departamento":"DEBIO","focal":"MARILENE BRAZIL","contato":"marilene.biologa@gmail.com","componente_short":"Capacitação","insumos":["Diárias","Combustível"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0015","atividade":"Desenvolvimento e difusão da informações sobre o tema da biodiversidade em ações de comunicação, educação ambiental e qualificação profissional. Como forma de sensibilizar e envolver a população em geral, bem como profissionais de áreas diversas e afins, em torno das metas e compromissos do Plano Estadual de Biodiversidade (PAEB).","componente":"4 - CAPACITAÇÃO, COOPERAÇÃO E COORDENAÇÃO DE PROJETOS ","localizacao":"Rio Branco - Acre","inicio":"01/01/2026","fim":"01/12/2026","valor_total":22400,"valor_exec":0.0,"prioridade":"IMEDIATAMENTE","lr":"LR PADRÃO","avaliacao":"RPAD","departamento":"DEBIO","focal":"MARILENE BRAZIL","contato":"marilene.biologa@gmail.com","componente_short":"Capacitação","insumos":["Diárias"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0016","atividade":"Manejo e gestão quelônios na área de influênecia do Rio Abunã no Estado do Acre para monitoramento e conservação das especies.","componente":"2 - GESTÃO INTEGRADA DA PAISAGEM","localizacao":"Rio Branco - Acre","inicio":"01/01/2026","fim":"01/12/2026","valor_total":257340,"valor_exec":81483.59,"prioridade":"EM EXECUÇÃO","lr":"LR PADRÃO","avaliacao":"RPAD","departamento":"DEBIO","focal":"MARILENE BRAZIL","contato":"marilene.biologa@gmail.com","componente_short":"Gestão da Paisagem","insumos":["Diárias","Combustível","Aquisição","Alimentação"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0017","atividade":"Seguimento de fluxos estabelecidos pela FGV e pela SEMA/AC","componente":"2 - GESTÃO INTEGRADA DA PAISAGEM","localizacao":"Rio Branco - Acre","inicio":"01/01/2026","fim":"01/12/2026","valor_total":155340,"valor_exec":56199.0,"prioridade":"EM EXECUÇÃO","lr":"LR PADRÃO","avaliacao":"RPAD","departamento":"DEBIO","focal":"MARILENE BRAZIL","contato":"marilene.biologa@gmail.com","componente_short":"Gestão da Paisagem","insumos":["Diárias","Combustível","Contratação","Alimentação","Alimentação"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0018","atividade":"Seminário de Conservação da Fauna Aquática","componente":"2 - GESTÃO INTEGRADA DA PAISAGEM","localizacao":"Rio Branco - Acre","inicio":"01/01/2026","fim":"01/12/2026","valor_total":98600,"valor_exec":0.0,"prioridade":"ATUALIZAR","lr":"LR PADRÃO","avaliacao":"TDR","departamento":"DEBIO","focal":"MARILENE BRAZIL","contato":"marilene.biologa@gmail.com","componente_short":"Gestão da Paisagem","insumos":["Contratação","Passagens aéreas","Diárias","Passagens aéreas","Combustível","Combustível"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0019","atividade":"Oficina do Plano Nacional de Quelônios Aquáticos Amazônicos - PANQuelônios","componente":"2 - GESTÃO INTEGRADA DA PAISAGEM","localizacao":"Manaus-AM","inicio":"01/01/2026","fim":"01/12/2026","valor_total":28500,"valor_exec":0.0,"prioridade":"ATUALIZAR","lr":"LR PADRÃO","avaliacao":"RPAD","departamento":"DEBIO","focal":"MARILENE BRAZIL","contato":"marilene.biologa@gmail.com","componente_short":"Gestão da Paisagem","insumos":["Diárias","Passagens aéreas"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0020","atividade":"Avaliação da Implementação do SEANP, atendendo os dispositivos da Lei Estadual Nº 3.883/2021","componente":"2 - GESTÃO INTEGRADA DA PAISAGEM","localizacao":"Estado do Acre","inicio":"01/01/2026","fim":"01/12/2026","valor_total":135000,"valor_exec":0.0,"prioridade":"2026","lr":"-","avaliacao":"TDR","departamento":"DEUC","focal":"MIRNA CANISO","contato":"mirnacaniso@gmail.com","componente_short":"Gestão da Paisagem","insumos":["Contratação","Contratação","Alimentação","Contratação","Contratação"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0021","atividade":"Aquisição de alimentos para viabilizar a participação das populações tradicionais que habitam as Ucs Estaduais durante a realização dos mutirões socioambientais e humanitário","componente":"2 - GESTÃO INTEGRADA DA PAISAGEM","localizacao":"Rio Branco, Bujari, Sena Madureira, Manoel Urbano, Tarauacá, Mâncio Lima e Cruzeiro do Sul","inicio":"01/01/2026","fim":"01/12/2026","valor_total":100000,"valor_exec":0.0,"prioridade":"2026","lr":"LR PADRÃO","avaliacao":null,"departamento":"DEBIO","focal":"MARILENE BRAZIL","contato":"marilene.biologa@gmail.com","componente_short":"Gestão da Paisagem","insumos":["Alimentação"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0022","atividade":"Participação de 02 técnicos na COP Biodiversidade em Ierevan-Armênia (2026)","componente":"2 - GESTÃO INTEGRADA DA PAISAGEM","localizacao":"Ierevan-Armênia","inicio":"01/01/2026","fim":"01/12/2026","valor_total":150000,"valor_exec":0.0,"prioridade":"2026","lr":"LR PADRÃO","avaliacao":"RPAD","departamento":"DEBIO","focal":"MARILENE BRAZIL","contato":"marilene.biologa@gmail.com","componente_short":"Gestão da Paisagem","insumos":["Diárias e passagens aéreas"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0023","atividade":"Participação de 4 (quatro) eventos nacionais na temática de biodiversidade (Série de eventos da Câmara técnica de Biodiversidade da ABEMA)","componente":"2 - GESTÃO INTEGRADA DA PAISAGEM","localizacao":"Capitais brasileiras","inicio":"01/01/2026","fim":"01/12/2026","valor_total":150000,"valor_exec":0.0,"prioridade":"ATUALIZAR","lr":"LR PADRÃO","avaliacao":"RPAD","departamento":"DEBIO","focal":"MARILENE BRAZIL","contato":"marilene.biologa@gmail.com","componente_short":"Gestão da Paisagem","insumos":["Diárias e passagens aéreas"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0024","atividade":"Manejo e gestão quelônios na área de influênecia do Rio Abunã no Estado do Acre para monitoramento e conservação das especies.","componente":"2 - GESTÃO INTEGRADA DA PAISAGEM","localizacao":"Acre (22 Municípios)","inicio":"01/01/2026","fim":"01/12/2026","valor_total":531880,"valor_exec":0.0,"prioridade":"2026","lr":"-","avaliacao":"TDR","departamento":"DEBIO","focal":"MARILENE BRAZIL","contato":"marilene.biologa@gmail.com","componente_short":"Gestão da Paisagem","insumos":["Contratação","Combustível, passagens, diárias e equipamentos","Diárias, passagens, combustível","Alimentação"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0025","atividade":"Rede de Sementes do Acre: Realizar pagamento de diárias para realização de capacitações, intercâmbios, visitas técnicas e monitoramento das atividades ","componente":"3 - POLÍTICAS PÚBLICAS PARA PROMOÇÃO DA GESTÃO INTEGRADA DA PAISAGEM, CONSERVAÇÃO E RECUPERAÇÃO DA VEGETAÇÃO NATIVA","localizacao":"Municípios do Acre","inicio":"01/01/2026","fim":"01/12/2026","valor_total":256900,"valor_exec":0.0,"prioridade":"ATUALIZAR","lr":"LR PADRÃO","avaliacao":"TDR","departamento":"SEMA","focal":"Erisson Cameli Santiago","contato":"erissoncameli@gmail.com","componente_short":"Políticas Públicas","insumos":["Contratação","Passagens aéreas"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0026","atividade":"Rede de Sementes do Acre: Realizar capacitações permanentes para coletores, técnicos e acadêmicos  ","componente":"3 - POLÍTICAS PÚBLICAS PARA PROMOÇÃO DA GESTÃO INTEGRADA DA PAISAGEM, CONSERVAÇÃO E RECUPERAÇÃO DA VEGETAÇÃO NATIVA","localizacao":"Municípios do Acre","inicio":"01/01/2026","fim":"01/12/2026","valor_total":52500,"valor_exec":0.0,"prioridade":"IMEDIATAMENTE","lr":"LR PADRÃO","avaliacao":"TDR","departamento":"SEMA","focal":"Erisson Cameli Santiago","contato":"erissoncameli@gmail.com","componente_short":"Políticas Públicas","insumos":["Contratação"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0027","atividade":"Viveiro de mudas","componente":"3 - POLÍTICAS PÚBLICAS PARA PROMOÇÃO DA GESTÃO INTEGRADA DA PAISAGEM, CONSERVAÇÃO E RECUPERAÇÃO DA VEGETAÇÃO NATIVA","localizacao":"Viveiro da Floresta e Biofábrica de Clones Vegetais ","inicio":"01/01/2026","fim":"01/12/2026","valor_total":500000,"valor_exec":0.0,"prioridade":"IMEDIATAMENTE","lr":"LR PADRÃO","avaliacao":"RPAD","departamento":"SEMA","focal":"Erisson Cameli Santiago","contato":"erissoncameli@gmail.com","componente_short":"Políticas Públicas","insumos":["Diárias","Combustível","Aquisição"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0028","atividade":"Consultoria para elaboração de materiais do PRA, Elaboração de um guia dos mutirões realizados pelo Projeto no âmbito do PRA e capacitação em Restauração Florestal","componente":"3 - POLÍTICAS PÚBLICAS PARA PROMOÇÃO DA GESTÃO INTEGRADA DA PAISAGEM, CONSERVAÇÃO E RECUPERAÇÃO DA VEGETAÇÃO NATIVA","localizacao":"Rio Branco, Capaixaba, Brasiléia, Epitaciolândia, Acrelândia, Feijó e Tarauacá","inicio":"01/01/2026","fim":"01/12/2026","valor_total":150000,"valor_exec":0.0,"prioridade":"ATUALIZAR","lr":"LR PADRÃO","avaliacao":"TDR ou ET","departamento":"SEMA","focal":"Erisson Cameli Santiago","contato":"erissoncameli@gmail.com","componente_short":"Políticas Públicas","insumos":["Contratação"]},{"ID":"DE-ASL2-POA3-SEMAAC-2026-0029","atividade":"Plano Estadual de Recuperação da Vegetação Nativa - PEVEG.","componente":"3 - POLÍTICAS PÚBLICAS PARA PROMOÇÃO DA GESTÃO INTEGRADA DA PAISAGEM, CONSERVAÇÃO E RECUPERAÇÃO DA VEGETAÇÃO NATIVA","localizacao":"SEMA - Acre em Rio Branco","inicio":"01/01/2026","fim":"01/12/2026","valor_total":380000,"valor_exec":0.0,"prioridade":"ATUALIZAR","lr":"-","avaliacao":"TDR","departamento":"SEMA","focal":"Erisson Cameli Santiago","contato":"erissoncameli@gmail.com","componente_short":"Políticas Públicas","insumos":["Contratação","Passagens aéreas","Diárias","Diárias"]}];
+
+let activeFilter = 'all';
+
+function fmt(v) {
+  if (v >= 1e6) return 'R$ ' + (v/1e6).toFixed(2) + 'M';
+  if (v >= 1e3) return 'R$ ' + (v/1e3).toFixed(1) + 'K';
+  return 'R$ ' + v.toLocaleString('pt-BR');
+}
+function fmtFull(v) {
+  return 'R$ ' + v.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+
+function priorBadge(p) {
+  const m = {
+    'IMEDIATAMENTE': ['badge-imediato','⚡ Imediata'],
+    'EM EXECUÇÃO':   ['badge-execucao','🔄 Em Execução'],
+    'ATUALIZAR':     ['badge-atualizar','📝 Atualizar'],
+    '2026':          ['badge-2026','📅 2026'],
+  };
+  const [cls, label] = m[String(p)] || ['badge-2026', p];
+  return `<span class="badge ${cls}">${label}</span>`;
+}
+function compBadge(c) {
+  const m = {
+    'Políticas Públicas': ['badge-comp-pol','🌿 Pol. Públicas'],
+    'Capacitação':        ['badge-comp-cap','📚 Capacitação'],
+    'Gestão da Paisagem': ['badge-comp-gest','🗺️ Gestão Paisagem'],
+  };
+  const [cls, label] = m[c] || ['badge-comp-pol', c];
+  return `<span class="badge ${cls}">${label}</span>`;
+}
+function lrBadge(lr) {
+  const m = {
+    'LR PRONTA':  ['badge-lr-pronta','✅ LR Pronta'],
+    'LR PADRÃO':  ['badge-lr-padrao','📄 LR Padrão'],
+    '-':          ['badge-lr-dash','— Não definido'],
+  };
+  const [cls, label] = m[lr] || ['badge-lr-dash', lr||'—'];
+  return `<span class="badge ${cls}">${label}</span>`;
+}
+
+function renderTable(data) {
+  const tbody = document.getElementById('table-body');
+  const noRes = document.getElementById('no-results');
+  tbody.innerHTML = '';
+  if (!data.length) { noRes.style.display='block'; return; }
+  noRes.style.display='none';
+  data.forEach((d,i) => {
+    const pct = d.valor_total > 0 ? Math.min(100,(d.valor_exec/d.valor_total*100)) : 0;
+    const num = String(i+1).padStart(2,'0');
+    const tr = document.createElement('tr');
+    tr.onclick = () => openModal(d);
+    tr.innerHTML = `
+      <td class="td-id">${d.ID.slice(-4)}</td>
+      <td class="td-atividade">
+        <div class="title">${d.atividade.split('\n')[0].slice(0,80)}${d.atividade.length>80?'…':''}</div>
+        <div class="sub">📍 ${(d.localizacao||'').split('\n')[0].slice(0,50)}…</div>
+      </td>
+      <td>${compBadge(d.componente_short)}</td>
+      <td style="font-size:12px">${d.departamento||'—'}</td>
+      <td class="td-budget" style="color:var(--green-mid)">${fmt(d.valor_total)}</td>
+      <td>
+        <div class="mini-prog">
+          <div class="mini-prog-track"><div class="mini-prog-fill" style="width:${pct}%"></div></div>
+          <div class="mini-prog-pct">${pct.toFixed(1)}%</div>
+        </div>
+      </td>
+      <td>${priorBadge(d.prioridade)}</td>
+      <td>${lrBadge(d.lr)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function getFiltered() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  return DATA.filter(d => {
+    const matchFilter = activeFilter === 'all' || String(d.prioridade) === activeFilter;
+    const matchSearch = !q || d.atividade.toLowerCase().includes(q) || (d.departamento||'').toLowerCase().includes(q) || (d.focal||'').toLowerCase().includes(q) || d.componente_short.toLowerCase().includes(q) || (d.localizacao||'').toLowerCase().includes(q);
+    return matchFilter && matchSearch;
+  });
+}
+
+function applyFilters() { renderTable(getFiltered()); }
+
+function setFilter(f, btn) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+
+function openModal(d) {
+  document.getElementById('modal-id').textContent = d.ID;
+  document.getElementById('modal-title').textContent = d.atividade.replace(/\n/g,' ');
+  document.getElementById('modal-budget').textContent = fmtFull(d.valor_total);
+  document.getElementById('modal-exec').textContent = fmtFull(d.valor_exec);
+  const pct = d.valor_total > 0 ? (d.valor_exec/d.valor_total*100).toFixed(1) : '0.0';
+  document.getElementById('modal-pct').textContent = pct + '%';
+  document.getElementById('modal-comp').textContent = d.componente_short;
+  document.getElementById('modal-dept').textContent = (d.departamento||'—') + ' / ' + (d.focal||'—');
+  document.getElementById('modal-loc').textContent = (d.localizacao||'—').replace(/\n/g,' ');
+  document.getElementById('modal-period').textContent = (d.inicio||'—') + ' → ' + (d.fim||'—');
+  document.getElementById('modal-prior').innerHTML = priorBadge(d.prioridade);
+  document.getElementById('modal-lr').innerHTML = lrBadge(d.lr) + (d.avaliacao ? ' &nbsp; <strong>' + d.avaliacao + '</strong>' : '');
+  document.getElementById('modal-contact').innerHTML = d.contato ? `<a href="mailto:${d.contato}" style="color:var(--green-mid)">${d.contato}</a>` : '—';
+  const insumos = document.getElementById('modal-insumos');
+  insumos.innerHTML = '';
+  const unique = [...new Set((d.insumos||[]).map(s => s.trim()).filter(Boolean))];
+  unique.forEach(ins => {
+    const span = document.createElement('span');
+    span.className = 'insumo-tag';
+    span.textContent = ins;
+    insumos.appendChild(span);
+  });
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(e) { if (e.target === document.getElementById('modal-overlay')) closeModalBtn(); }
+function closeModalBtn() { document.getElementById('modal-overlay').classList.remove('open'); }
+
+// Progress bars by component
+function initProgressBars() {
+  const comp = {gest:{budget:0,exec:0}, pol:{budget:0,exec:0}, cap:{budget:0,exec:0}};
+  DATA.forEach(d => {
+    const k = d.componente_short==='Gestão da Paisagem'?'gest':d.componente_short==='Políticas Públicas'?'pol':'cap';
+    comp[k].budget += d.valor_total;
+    comp[k].exec += d.valor_exec;
+  });
+  ['gest','pol','cap'].forEach(k => {
+    const pct = comp[k].budget>0 ? Math.min(100, comp[k].exec/comp[k].budget*100) : 0;
+    document.getElementById('pb-'+k).style.width = pct + '%';
+    document.getElementById('pb-'+k+'-val').textContent = fmt(comp[k].exec) + ' / ' + fmt(comp[k].budget) + ' (' + pct.toFixed(1) + '%)';
+  });
+}
+
+// Priority chart
+function initPriorityChart() {
+  const counts = {};
+  DATA.forEach(d => { const k = String(d.prioridade); counts[k] = (counts[k]||0)+1; });
+  const total = DATA.length;
+  const order = ['IMEDIATAMENTE','EM EXECUÇÃO','ATUALIZAR','2026'];
+  const colors = ['#e07b00','#1a7a46','#c0392b','#1a4f8a'];
+  const labels = ['⚡ Imediata','🔄 Em Execução','📝 Atualizar','📅 2026'];
+  const el = document.getElementById('chart-prioridade');
+  el.innerHTML = '';
+  order.forEach((k,i) => {
+    const n = counts[k]||0;
+    const pct = total>0 ? n/total*100 : 0;
+    el.innerHTML += `
+      <div class="comp-bar">
+        <div class="comp-bar-label">${labels[i]}</div>
+        <div class="comp-bar-track"><div class="comp-bar-fill" style="width:${pct}%;background:${colors[i]}"></div></div>
+        <div class="comp-bar-val">${n} ativ. · ${pct.toFixed(0)}%</div>
+      </div>`;
+  });
+}
+
+// Init
+renderTable(DATA);
+initProgressBars();
+initPriorityChart();
+</script>
+</body>
+</html>
