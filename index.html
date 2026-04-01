@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASL2 – POA3 | SEMA-AC 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde: #1a5c38;
+    --verde-claro: #2d8653;
+    --verde-vivo: #4caf7d;
+    --terra: #8b5e3c;
+    --areia: #f5efe6;
+    --branco: #fafaf7;
+    --texto: #1a1a16;
+    --cinza: #6b7264;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--branco);
+    color: var(--texto);
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--verde);
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234caf7d' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.5;
+  }
+
+  .hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 3rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .logo-tag {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    color: var(--verde-vivo);
+    text-transform: uppercase;
+  }
+
+  .badge {
+    background: rgba(76,175,125,0.15);
+    border: 1px solid rgba(76,175,125,0.3);
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    color: var(--verde-vivo);
+    letter-spacing: 0.1em;
+    font-weight: 500;
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 3rem;
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.8rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--verde-vivo);
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-title span {
+    color: var(--verde-vivo);
+    font-style: italic;
+  }
+
+  .hero-desc {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.7;
+    max-width: 550px;
+    font-weight: 300;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.1);
+    position: relative;
+    z-index: 1;
+    margin: 0 3rem 3rem;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .stat {
+    padding: 2rem;
+    background: rgba(0,0,0,0.2);
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--verde-vivo);
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 0.3rem;
+    display: block;
+  }
+
+  /* SECTION */
+  .section {
+    padding: 5rem 3rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .section-num {
+    font-size: 0.7rem;
+    color: var(--cinza);
+    letter-spacing: 0.2em;
+    font-weight: 500;
+    text-transform: uppercase;
+    padding-top: 0.3rem;
+    border-top: 2px solid var(--verde-vivo);
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    color: var(--verde);
+  }
+
+  /* COMPONENTES */
+  .componentes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5px;
+    background: #e5e0d8;
+    border: 1.5px solid #e5e0d8;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .comp-card {
+    background: var(--branco);
+    padding: 2rem;
+    transition: background 0.2s;
+  }
+
+  .comp-card:hover { background: var(--areia); }
+
+  .comp-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+  }
+
+  .comp-card:nth-child(1) .comp-icon { background: #e8f5ee; }
+  .comp-card:nth-child(2) .comp-icon { background: #e8eef5; }
+  .comp-card:nth-child(3) .comp-icon { background: #f5f0e8; }
+  .comp-card:nth-child(4) .comp-icon { background: #f5e8e8; }
+
+  .comp-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cinza);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+
+  .comp-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--verde);
+    line-height: 1.3;
+    margin-bottom: 0.75rem;
+  }
+
+  .comp-value {
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--verde-claro);
+  }
+
+  /* ATIVIDADES */
+  .atividades-bg {
+    background: var(--areia);
+  }
+
+  .atividades-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .atividade-card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.06);
+    display: grid;
+    grid-template-columns: 6px 1fr;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .atividade-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+  }
+
+  .atividade-stripe { background: var(--verde); }
+  .atividade-stripe.politicas { background: var(--verde-claro); }
+  .atividade-stripe.gestao { background: var(--terra); }
+  .atividade-stripe.capacitacao { background: #5b8db8; }
+
+  .atividade-body {
+    padding: 1.75rem 2rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .atividade-id {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--cinza);
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .atividade-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--texto);
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+  }
+
+  .atividade-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .tag {
+    background: var(--areia);
+    border-radius: 50px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.7rem;
+    color: var(--cinza);
+    font-weight: 500;
+  }
+
+  .tag.loc {
+    background: #e8f5ee;
+    color: var(--verde);
+  }
+
+  .atividade-valor {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .valor-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--verde);
+  }
+
+  .valor-label {
+    font-size: 0.65rem;
+    color: var(--cinza);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: block;
+    margin-top: 0.2rem;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--verde);
+    color: rgba(255,255,255,0.6);
+    padding: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  footer .footer-title {
+    font-family: 'Playfair Display', serif;
+    color: #fff;
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+  }
+
+  footer a { color: var(--verde-vivo); text-decoration: none; }
+
+  /* FILTRO */
+  .filtros {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .filtro-btn {
+    padding: 0.5rem 1.25rem;
+    border-radius: 50px;
+    border: 1.5px solid rgba(0,0,0,0.12);
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--cinza);
+    font-weight: 500;
+  }
+
+  .filtro-btn:hover, .filtro-btn.ativo {
+    background: var(--verde);
+    border-color: var(--verde);
+    color: #fff;
+  }
+
+  @media (max-width: 700px) {
+    .hero-top, .hero-content, .hero-stats { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .hero-stats { grid-template-columns: 1fr; margin: 0 1.5rem 2rem; }
+    .section { padding: 3rem 1.5rem; }
+    .atividade-body { grid-template-columns: 1fr; }
+    footer { padding: 2rem 1.5rem; flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-top">
+    <span class="logo-tag">SEMA · Acre · POA3 · 2026</span>
+    <span class="badge">ASL2 – Amazônia Sem Limites 2</span>
+  </div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Plano Operativo Anual · 3ª Edição</p>
+    <h1 class="hero-title">
+      Conservação<br>e <span>Restauração</span><br>Florestal
+    </h1>
+    <p class="hero-desc">
+      Atividades planejadas pela Secretaria de Estado de Meio Ambiente do Acre no âmbito do Programa ASL2, voltadas para a gestão integrada da paisagem, restauração florestal e fortalecimento das unidades de conservação estaduais.
+    </p>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-num">29</span>
+      <span class="stat-label">Atividades planejadas</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">R$ 5,1M</span>
+      <span class="stat-label">Orçamento total</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">22</span>
+      <span class="stat-label">Unidades de conservação</span>
+    </div>
+  </div>
+</section>
+
+<!-- COMPONENTES -->
+<section class="section">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Componentes do Programa</h2>
+  </div>
+
+  <div class="componentes-grid">
+    <div class="comp-card">
+      <div class="comp-icon">🌿</div>
+      <p class="comp-label">Componente 2</p>
+      <p class="comp-name">Gestão Integrada da Paisagem</p>
+      <p class="comp-value">R$ 716.940</p>
+    </div>
+    <div class="comp-card">
+      <div class="comp-icon">📋</div>
+      <p class="comp-label">Componente 3</p>
+      <p class="comp-name">Políticas Públicas para Conservação e Recuperação</p>
+      <p class="comp-value">R$ 2.657.600</p>
+    </div>
+    <div class="comp-card">
+      <div class="comp-icon">🎓</div>
+      <p class="comp-label">Componente 4</p>
+      <p class="comp-name">Capacitação, Cooperação e Coordenação</p>
+      <p class="comp-value">R$ 486.830</p>
+    </div>
+    <div class="comp-card">
+      <div class="comp-icon">🗂️</div>
+      <p class="comp-label">Gestão</p>
+      <p class="comp-name">Seguimento de Fluxos e Governança</p>
+      <p class="comp-value">R$ 76.440</p>
+    </div>
+  </div>
+</section>
+
+<!-- ATIVIDADES -->
+<section class="section atividades-bg">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Atividades Propostas</h2>
+  </div>
+
+  <div class="filtros">
+    <button class="filtro-btn ativo" onclick="filtrar('todos', this)">Todas</button>
+    <button class="filtro-btn" onclick="filtrar('politicas', this)">Políticas Públicas</button>
+    <button class="filtro-btn" onclick="filtrar('gestao', this)">Gestão da Paisagem</button>
+    <button class="filtro-btn" onclick="filtrar('capacitacao', this)">Capacitação</button>
+  </div>
+
+  <div class="atividades-list" id="lista">
+
+    <!-- 0001 -->
+    <div class="atividade-card" data-comp="politicas">
+      <div class="atividade-stripe politicas"></div>
+      <div class="atividade-body">
+        <div>
+          <p class="atividade-id">DE-ASL2-POA3-SEMAAC-2026-0001</p>
+          <p class="atividade-title">Mapeamento e identificação de áreas para restauração e monitoramento de regeneração nas Florestas Estaduais (Antimary, Afluente, Gregório, Liberdade, Mogno) e ARIE Japiim Pentecoste</p>
+          <div class="atividade-meta">
+            <span class="tag">Políticas Públicas</span>
+            <span class="tag loc">📍 FLOEs + ARIE</span>
+            <span class="tag">Consultoria PJ · Combustível · Diárias</span>
+          </div>
+        </div>
+        <div class="atividade-valor">
+          <span class="valor-num">R$ 500k</span>
+          <span class="valor-label">Orçamento</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 0002 -->
+    <div class="atividade-card" data-comp="capacitacao">
+      <div class="atividade-stripe capacitacao"></div>
+      <div class="atividade-body">
+        <div>
+          <p class="atividade-id">DE-ASL2-POA3-SEMAAC-2026-0002</p>
+          <p class="atividade-title">Intercâmbio de seis gestores das FLOEs para conhecer experiência de regeneração natural vinculada ao Programa Monitora no Cerrado (PN Chapada dos Veadeiros)</p>
+          <div class="atividade-meta">
+            <span class="tag">Capacitação</span>
+            <span class="tag loc">📍 Brasília – DF</span>
+            <span class="tag">Passagens · Diárias</span>
+          </div>
+        </div>
+        <div class="atividade-valor">
+          <span class="valor-num">R$ 35,5k</span>
+          <span class="valor-label">Orçamento</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 0003 -->
+    <div class="atividade-card" data-comp="politicas">
+      <div class="atividade-stripe politicas"></div>
+      <div class="atividade-body">
+        <div>
+          <p class="atividade-id">DE-ASL2-POA3-SEMAAC-2026-0003</p>
+          <p class="atividade-title">Reuniões comunitárias para definição de áreas e colaboradores de gestão para a implementação de restauração natural nas Florestas Estaduais — 12 oficinas com 35 participantes cada</p>
+          <div class="atividade-meta">
+            <span class="tag">Políticas Públicas</span>
+            <span class="tag loc">📍 FLOEs estaduais</span>
+            <span class="tag">Combustível · Diárias · Alimentação · Contratação</span>
+          </div>
+        </div>
+        <div class="atividade-valor">
+          <span class="valor-num">R$ 338k</span>
+          <span class="valor-label">Orçamento</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 0004 -->
+    <div class="atividade-card" data-comp="politicas">
+      <div class="atividade-stripe politicas"></div>
+      <div class="atividade-body">
+        <div>
+          <p class="atividade-id">DE-ASL2-POA3-SEMAAC-2026-0004</p>
+          <p class="atividade-title">Capacitação de colaboradores comunitários de gestão nas atividades de regeneração natural florestal nas FLOEs estaduais — 12 oficinas</p>
+          <div class="atividade-meta">
+            <span class="tag">Políticas Públicas</span>
+            <span class="tag loc">📍 FLOEs estaduais</span>
+            <span class="tag">Combustível · Diárias · Alimentação</span>
+          </div>
+        </div>
+        <div class="atividade-valor">
+          <span class="valor-num">R$ 198,7k</span>
+          <span class="valor-label">Orçamento</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 0005 -->
+    <div class="atividade-card" data-comp="politicas">
+      <div class="atividade-stripe politicas"></div>
+      <div class="atividade-body">
+        <div>
+          <p class="atividade-id">DE-ASL2-POA3-SEMAAC-2026-0005</p>
+          <p class="atividade-title">Regeneração natural assistida nas 05 FLOEs e ARIE Japiim Pentecoste — construção participativa, assistência técnica, extensão rural, envolvendo 50+ famílias beneficiárias e georreferenciamento</p>
+          <div class="atividade-meta">
+            <span class="tag">Políticas Públicas</span>
+            <span class="tag loc">📍 FLOEs + ARIE · 100 ha</span>
+            <span class="tag">Consultoria PJ</span>
+          </div>
+        </div>
+        <div class="atividade-valor">
+          <span class="valor-num">R$ 1,5M</span>
+          <span class="valor-label">Orçamento</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 0006 -->
+    <div class="atividade-card" data-comp="capacitacao">
+      <div class="atividade-stripe capacitacao"></div>
+      <div class="atividade-body">
+        <div>
+          <p class="atividade-id">DE-ASL2-POA3-SEMAAC-2026-0006</p>
+          <p class="atividade-title">Encontro de gestores do Sistema Estadual de Áreas Naturais Protegidas do Acre (SEANP) — fortalecimento da governança de 22 UCs e 36 TIs</p>
+          <div class="atividade-meta">
+            <span class="tag">Capacitação</span>
+            <span class="tag loc">📍 Rio Branco / Cruzeiro do Sul</span>
+            <span class="tag">Diesel · Passagens · Diárias · Moderação</span>
+          </div>
+        </div>
+        <div class="atividade-valor">
+          <span class="valor-num">R$ 131,5k</span>
+          <span class="valor-label">Orçamento</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 0007 -->
+    <div class="atividade-card" data-comp="politicas">
+      <div class="atividade-stripe politicas"></div>
+      <div class="atividade-body">
+        <div>
+          <p class="atividade-id">DE-ASL2-POA3-SEMAAC-2026-0007</p>
+          <p class="atividade-title">Elaboração e implementação de protocolo de combate a incêndios florestais nas APAs Igarapé São Francisco (30.004 ha) e Lago do Amapá (5.208 ha)</p>
+          <div class="atividade-meta">
+            <span class="tag">Políticas Públicas</span>
+            <span class="tag loc">📍 Rio Branco / Bujari</span>
+            <span class="tag">Combustível · Diárias · EPIs</span>
+          </div>
+        </div>
+        <div class="atividade-valor">
+          <span class="valor-num">R$ 120k</span>
+          <span class="valor-label">Orçamento</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 0008 -->
+    <div class="atividade-card" data-comp="capacitacao">
+      <div class="atividade-stripe capacitacao"></div>
+      <div class="atividade-body">
+        <div>
+          <p class="atividade-id">DE-ASL2-POA3-SEMAAC-2026-0008</p>
+          <p class="atividade-title">Capacitação de 12 técnicos do DEUC em gestão de UCs, técnicas de restauração florestal e conservação da biodiversidade — cursos nacionais</p>
+          <div class="atividade-meta">
+            <span class="tag">Capacitação</span>
+            <span class="tag loc">📍 SP · RJ · BSB · Manaus · AL</span>
+            <span class="tag">Passagens · Diárias</span>
+          </div>
+        </div>
+        <div class="atividade-valor">
+          <span class="valor-num">R$ 87k</span>
+          <span class="valor-label">Orçamento</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 0009 -->
+    <div class="atividade-card" data-comp="gestao">
+      <div class="atividade-stripe gestao"></div>
+      <div class="atividade-body">
+        <div>
+          <p class="atividade-id">DE-ASL2-POA3-SEMAAC-2026-0009</p>
+          <p class="atividade-title">Implementação de 08 Conselhos Gestores ativos nas FLOEs Antimary, Afluente, Gregório, Liberdade, Mogno, ARIE Japiim Pentecoste, APA Lago do Amapá e APA São Francisco</p>
+          <div class="atividade-meta">
+            <span class="tag">Gestão Integrada</span>
+            <span class="tag loc">📍 8 UCs estaduais</span>
+            <span class="tag">Diárias · Combustível · Alimentação</span>
+          </div>
+        </div>
+        <div class="atividade-valor">
+          <span class="valor-num">R$ 115,2k</span>
+          <span class="valor-label">Orçamento</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 0010 -->
+    <div class="atividade-card" data-comp="gestao">
+      <div class="atividade-stripe gestao"></div>
+      <div class="atividade-body">
+        <div>
+          <p class="atividade-id">DE-ASL2-POA3-SEMAAC-2026-0010</p>
+          <p class="atividade-title">Revisão e atualização de 03 planos de manejo: CFERG (Rio Gregório), FLOE Antimary e ARIE Japiim Pentecoste</p>
+          <div class="atividade-meta">
+            <span class="tag">Gestão Integrada</span>
+            <span class="tag loc">📍 CFERG · Antimary · ARIE</span>
+            <span class="tag">Consultoria PJ</span>
+          </div>
+        </div>
+        <div class="atividade-valor">
+          <span class="valor-num">R$ 800k</span>
+          <span class="valor-label">Orçamento</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 0011 -->
+    <div class="atividade-card" data-comp="gestao">
+      <div class="atividade-stripe gestao"></div>
+      <div class="atividade-body">
+        <div>
+          <p class="atividade-id">DE-ASL2-POA3-SEMAAC-2026-0011</p>
+          <p class="atividade-title">Elaboração do plano de manejo da Floresta Estadual Afluente (155.121 ha)</p>
+          <div class="atividade-meta">
+            <span class="tag">Gestão Integrada</span>
+            <span class="tag loc">📍 FLOE Afluente</span>
+            <span class="tag">Consultoria PJ</span>
+          </div>
+        </div>
+        <div class="atividade-valor">
+          <span class="valor-num">R$ 350k</span>
+          <span class="valor-label">Orçamento</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 0025–0026 Rede de Sementes -->
+    <div class="atividade-card" data-comp="politicas">
+      <div class="atividade-stripe politicas"></div>
+      <div class="atividade-body">
+        <div>
+          <p class="atividade-id">DE-ASL2-POA3-SEMAAC-2026-0025/0026</p>
+          <p class="atividade-title">Rede de Sementes do Acre: capacitações permanentes para coletores, técnicos e acadêmicos; diárias para intercâmbios, visitas técnicas e monitoramento</p>
+          <div class="atividade-meta">
+            <span class="tag">Políticas Públicas</span>
+            <span class="tag loc">📍 Municípios do Acre</span>
+            <span class="tag">Diárias · Contratação</span>
+          </div>
+        </div>
+        <div class="atividade-valor">
+          <span class="valor-num">R$ 240,6k</span>
+          <span class="valor-label">Orçamento</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 0022 COP -->
+    <div class="atividade-card" data-comp="gestao">
+      <div class="atividade-stripe gestao"></div>
+      <div class="atividade-body">
+        <div>
+          <p class="atividade-id">DE-ASL2-POA3-SEMAAC-2026-0022</p>
+          <p class="atividade-title">Participação de 02 técnicos na COP Biodiversidade em Yerevan, Armênia (2026)</p>
+          <div class="atividade-meta">
+            <span class="tag">Gestão Integrada</span>
+            <span class="tag loc">📍 Yerevan – Armênia</span>
+            <span class="tag">Passagens · Diárias internacionais</span>
+          </div>
+        </div>
+        <div class="atividade-valor">
+          <span class="valor-num">R$ 150k</span>
+          <span class="valor-label">Orçamento</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 0021 Mutirões -->
+    <div class="atividade-card" data-comp="gestao">
+      <div class="atividade-stripe gestao"></div>
+      <div class="atividade-body">
+        <div>
+          <p class="atividade-id">DE-ASL2-POA3-SEMAAC-2026-0021</p>
+          <p class="atividade-title">Aquisição de alimentos para viabilizar a participação de populações tradicionais em mutirões socioambientais e humanitários nas UCs estaduais</p>
+          <div class="atividade-meta">
+            <span class="tag">Gestão Integrada</span>
+            <span class="tag loc">📍 7 municípios do Acre</span>
+            <span class="tag">Aquisição de alimentos</span>
+          </div>
+        </div>
+        <div class="atividade-valor">
+          <span class="valor-num">R$ 100k</span>
+          <span class="valor-label">Orçamento</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 0028 PRA -->
+    <div class="atividade-card" data-comp="politicas">
+      <div class="atividade-stripe politicas"></div>
+      <div class="atividade-body">
+        <div>
+          <p class="atividade-id">DE-ASL2-POA3-SEMAAC-2026-0028</p>
+          <p class="atividade-title">Consultoria para materiais do PRA, guia dos mutirões e capacitação em Restauração Florestal em municípios do Acre</p>
+          <div class="atividade-meta">
+            <span class="tag">Políticas Públicas</span>
+            <span class="tag loc">📍 Rio Branco · Brasiléia · Feijó e outros</span>
+            <span class="tag">Consultoria PJ</span>
+          </div>
+        </div>
+        <div class="atividade-valor">
+          <span class="valor-num">R$ 150k</span>
+          <span class="valor-label">Orçamento</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 0029 PEVEG -->
+    <div class="atividade-card" data-comp="politicas">
+      <div class="atividade-stripe politicas"></div>
+      <div class="atividade-body">
+        <div>
+          <p class="atividade-id">DE-ASL2-POA3-SEMAAC-2026-0029</p>
+          <p class="atividade-title">Plano Estadual de Recuperação da Vegetação Nativa (PEVEG)</p>
+          <div class="atividade-meta">
+            <span class="tag">Políticas Públicas</span>
+            <span class="tag loc">📍 SEMA – Rio Branco</span>
+            <span class="tag">Consultoria</span>
+          </div>
+        </div>
+        <div class="atividade-valor">
+          <span class="valor-num">R$ 200k</span>
+          <span class="valor-label">Orçamento</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <p class="footer-title">ASL2 – POA3 · SEMA-AC · 2026</p>
+    <p style="font-size:0.8rem;">Secretaria de Estado de Meio Ambiente do Acre</p>
+    <p style="font-size:0.8rem; margin-top:0.3rem;">Focal: Mirna Caniso · <a href="mailto:mirnacaniso@gmail.com">mirnacaniso@gmail.com</a></p>
+  </div>
+  <div style="text-align:right;">
+    <p style="font-size:0.75rem;">Unidade Operativa: SEMA AC</p>
+    <p style="font-size:0.75rem; margin-top:0.3rem;">Departamento: DEUC</p>
+    <p style="font-size:0.75rem; margin-top:0.3rem; color: rgba(255,255,255,0.35);">asl2-poa3-fgv · 2026</p>
+  </div>
+</footer>
+
+<script>
+  function filtrar(comp, btn) {
+    document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('ativo'));
+    btn.classList.add('ativo');
+    document.querySelectorAll('.atividade-card').forEach(card => {
+      if (comp === 'todos' || card.dataset.comp === comp) {
+        card.style.display = 'grid';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+</script>
+</body>
+</html>
